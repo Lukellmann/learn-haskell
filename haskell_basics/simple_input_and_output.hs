@@ -1,5 +1,3 @@
-import Language.Haskell.TH (doublePrimL)
-
 -- Sequencing actions with do
 
 greet :: IO ()
