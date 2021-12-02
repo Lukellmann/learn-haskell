@@ -1,6 +1,6 @@
 x /= y = not (x == y)
 
--- guards:
+-- Guards
 
 absolute x
     | x < 0     = -x
