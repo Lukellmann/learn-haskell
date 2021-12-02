@@ -7,8 +7,8 @@ pts :: Int -> Int
 pts 1 = 10
 pts 2 = 6
 pts x
-  | x <= 6 = 7 - x
-  | otherwise = 0
+  | x < 1 || x > 7 = 0
+  | otherwise = 7 - x
 
 fst' :: (a, b) -> a
 fst' (x, _) = x
