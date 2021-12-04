@@ -1,0 +1,10 @@
+# exclude everything (for executables without a file extension)
+*
+
+# reinclude everything with a file extension
+!*/
+!*.*
+
+# but exclude:
+*.o
+*.hi
