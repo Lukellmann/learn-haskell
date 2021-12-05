@@ -1,3 +1,5 @@
+-- Explicit characters in place of indentation
+
 foo, foo', foo'' :: Double -> Double
 
 foo x =
