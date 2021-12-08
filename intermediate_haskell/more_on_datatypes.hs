@@ -105,7 +105,7 @@ cfgUndef = Configuration {} -- evaluating any field will fail
 data MyMaybe a = MyNothing | MyJust a
 
 lookupName :: [(String, String)] -> String -> MyMaybe (String, String)
-lookupName _ _ = error "dummy"
+lookupName _ _ = undefined
 
 type Stack a = [a]
 

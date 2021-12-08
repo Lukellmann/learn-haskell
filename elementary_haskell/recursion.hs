@@ -1,4 +1,4 @@
-import GHC.Natural (Natural)
+import Numeric.Natural (Natural)
 
 -- Numeric recursion
 

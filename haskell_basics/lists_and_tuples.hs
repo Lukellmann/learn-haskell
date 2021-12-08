@@ -1,4 +1,4 @@
-import GHC.Char (chr)
+import Data.Char (chr)
 
 cons8 list = 8 : list
 
