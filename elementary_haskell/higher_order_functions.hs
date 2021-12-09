@@ -1,4 +1,5 @@
 import Data.Char (toLower)
+import Prelude hiding (const, curry, flip, id, uncurry, ($), (.))
 
 -- A sorting algorithm
 
@@ -60,34 +61,34 @@ mapIO' f list = sequenceIO (map f list)
 
 -- Function manipulation
 
-myFlip :: (a -> b -> c) -> (b -> a -> c) -- same as (a -> b -> c) -> b -> a -> c
-myFlip f a b = f b a
+flip :: (a -> b -> c) -> (b -> a -> c) -- same as (a -> b -> c) -> b -> a -> c
+flip f a b = f b a
 
-o {- my (.) -} :: (b -> c) -> (a -> b) -> (a -> c) -- same as (b -> c) -> (a -> b) -> a -> c
-f `o` g = \x -> f (g x)
+(.) :: (b -> c) -> (a -> b) -> (a -> c) -- same as (b -> c) -> (a -> b) -> a -> c
+f . g = \x -> f (g x)
 
-myInits :: [a] -> [[a]]
-myInits = map reverse . scanl (flip (:)) []
+inits :: [a] -> [[a]]
+inits = map reverse . scanl (flip (:)) []
 
-($$) {- my ($) -} :: (a -> b) -> a -> b
-f $$ x = f x
+($) :: (a -> b) -> a -> b
+f $ x = f x
 
-myInits' :: [a] -> [[a]]
-myInits' xs = map reverse . scanl (flip (:)) [] $ xs
+inits' :: [a] -> [[a]]
+inits' xs = map reverse . scanl (flip (:)) [] $ xs
 
 mapResult = map ($ 2) [(2 *), (4 *), (8 *)]
 
-myCurry :: ((a, b) -> c) -> a -> b -> c
-myCurry f x y = f (x, y) -- or myCurry f = \x y -> f (x, y)
+curry :: ((a, b) -> c) -> a -> b -> c
+curry f x y = f (x, y) -- or curry f = \x y -> f (x, y)
 
-myUncurry :: (a -> b -> c) -> (a, b) -> c
-myUncurry f (x, y) = f x y -- or myUncurry f = \(x, y) -> f x y
+uncurry :: (a -> b -> c) -> (a, b) -> c
+uncurry f (x, y) = f x y -- or ucurry f = \(x, y) -> f x y
 
-myId :: a -> a
-myId x = x
+id :: a -> a
+id x = x
 
-myConst :: a -> (b -> a) -- same as a -> b -> a
-myConst x _ = x -- or myConst x = \_ -> x
+const :: a -> (b -> a) -- same as a -> b -> a
+const x _ = x -- or const x = \_ -> x
 
 boringFoldl, coolFoldl, coolFoldl' :: (b -> a -> b) -> b -> [a] -> b
 boringFoldl f acc = foldr (flip f) acc . reverse

@@ -1,4 +1,5 @@
 import Data.List (delete)
+import Prelude hiding (elem)
 
 -- let and where revisited
 
@@ -54,8 +55,8 @@ xs \\ ys = foldl (\zs y -> delete y zs) xs ys
 multiplyList :: Num a => a -> [a] -> [a]
 multiplyList m = map (m *)
 
-myElem :: Eq a => a -> [a] -> Bool
-x `myElem` xs = any (== x) xs
+elem :: Eq a => a -> [a] -> Bool
+x `elem` xs = any (== x) xs
 
 g :: Num a => [a] -> [a]
 g = map (\x -> x * 2 + 3)

@@ -1,86 +1,87 @@
 import Data.List (foldl')
+import Prelude hiding (concat, foldl, foldl1, foldr, foldr1, map, product, reverse, sum)
 
 -- Folds
 
-mySum :: Num a => [a] -> a
-mySum [] = 0
-mySum (x : xs) = x + mySum xs
+sum :: Num a => [a] -> a
+sum [] = 0
+sum (x : xs) = x + sum xs
 
-myProduct :: Num a => [a] -> a
-myProduct [] = 1
-myProduct (x : xs) = x * myProduct xs
+product :: Num a => [a] -> a
+product [] = 1
+product (x : xs) = x * product xs
 
-myConcat :: [[a]] -> [a]
-myConcat [] = []
-myConcat (x : xs) = x ++ myConcat xs
+concat :: [[a]] -> [a]
+concat [] = []
+concat (x : xs) = x ++ concat xs
 
-myFoldr :: (a -> b -> b) -> b -> [a] -> b
-myFoldr _ acc [] = acc
-myFoldr f acc (x : xs) = f x (myFoldr f acc xs)
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ acc [] = acc
+foldr f acc (x : xs) = f x (foldr f acc xs)
 
-myFoldl :: (b -> a -> b) -> b -> [a] -> b
-myFoldl _ acc [] = acc
-myFoldl f acc (x : xs) = myFoldl f (f acc x) xs
+foldl :: (b -> a -> b) -> b -> [a] -> b
+foldl _ acc [] = acc
+foldl f acc (x : xs) = foldl f (f acc x) xs
 
-foldrIsRightAssociative = myFoldr (-) 6 [1, 2, 3, 4] == 1 - (2 - (3 - (4 - 6)))
+foldrIsRightAssociative = foldr (-) 6 [1, 2, 3, 4] == 1 - (2 - (3 - (4 - 6)))
 
-foldlIsLeftAssociative = myFoldl (-) 6 [1, 2, 3, 4] == (((6 - 1) - 2) - 3) - 4
+foldlIsLeftAssociative = foldl (-) 6 [1, 2, 3, 4] == (((6 - 1) - 2) - 3) - 4
 
-myFoldr1 :: (a -> a -> a) -> [a] -> a
-myFoldr1 _ [] = error "empty list"
-myFoldr1 _ [x] = x
-myFoldr1 f (x : xs) = f x (myFoldr1 f xs)
+foldr1 :: (a -> a -> a) -> [a] -> a
+foldr1 _ [] = error "empty list"
+foldr1 _ [x] = x
+foldr1 f (x : xs) = f x (foldr1 f xs)
 
-myFoldl1 :: (a -> a -> a) -> [a] -> a
-myFoldl1 _ [] = error "empty list"
-myFoldl1 f (x : xs) = myFoldl f x xs
+foldl1 :: (a -> a -> a) -> [a] -> a
+foldl1 _ [] = error "empty list"
+foldl1 f (x : xs) = foldl f x xs
 
 echoes :: [Int] -> [Int]
-echoes = myFoldr (\x xs -> replicate x x ++ xs) []
+echoes = foldr (\x xs -> replicate x x ++ xs) []
 
-myMap :: (a -> b) -> [a] -> [b]
-myMap f = myFoldr (\x xs -> f x : xs) []
+map :: (a -> b) -> [a] -> [b]
+map f = foldr (\x xs -> f x : xs) []
 
 andRecursive, andFold, orRecursive, orFold :: [Bool] -> Bool
 
 andRecursive [] = True
 andRecursive (x : xs) = x && andRecursive xs
 
-andFold = myFoldr (&&) True
+andFold = foldr (&&) True
 
 orRecursive [] = False
 orRecursive (x : xs) = x || orRecursive xs
 
-orFold = myFoldr (||) False
+orFold = foldr (||) False
 
-myMaximumr, myMaximuml, myMinimumr, myMinimuml :: Ord a => [a] -> a
-myMaximumr = myFoldr1 max
-myMaximuml = myFoldl1 max
-myMinimumr = myFoldr1 min
-myMinimuml = myFoldl1 min
+maximumr, maximuml, minimumr, minimuml :: Ord a => [a] -> a
+maximumr = foldr1 max
+maximuml = foldl1 max
+minimumr = foldr1 min
+minimuml = foldl1 min
 
-myReverse :: [a] -> [a]
-myReverse = foldl' (flip (:)) []
+reverse :: [a] -> [a]
+reverse = foldl' (flip (:)) []
 
 -- Scans
 
-myScanrRecursive, myScanrFold :: (a -> b -> b) -> b -> [a] -> [b]
+scanrRecursive, scanrFold :: (a -> b -> b) -> b -> [a] -> [b]
 
-myScanrRecursive _ initial [] = [initial]
-myScanrRecursive step initial (x : xs) =
-  let prev = myScanrRecursive step initial xs
+scanrRecursive _ initial [] = [initial]
+scanrRecursive step initial (x : xs) =
+  let prev = scanrRecursive step initial xs
    in step x (head prev) : prev
 
-myScanrFold step initial = myFoldr (\x xs -> step x (head xs) : xs) [initial]
+scanrFold step initial = foldr (\x xs -> step x (head xs) : xs) [initial]
 
-myScanlRecursive, myScanlFold, myScanlFoldSlow :: (b -> a -> b) -> b -> [a] -> [b]
+scanlRecursive, scanlFold, scanlFoldSlow :: (b -> a -> b) -> b -> [a] -> [b]
 
-myScanlRecursive _ initial [] = [initial]
-myScanlRecursive step initial (x : xs) = initial : myScanlRecursive step (step initial x) xs
+scanlRecursive _ initial [] = [initial]
+scanlRecursive step initial (x : xs) = initial : scanlRecursive step (step initial x) xs
 
-myScanlFold step initial = reverse . myFoldl (\xs x -> step (head xs) x : xs) [initial]
+scanlFold step initial = reverse . foldl (\xs x -> step (head xs) x : xs) [initial]
 
-myScanlFoldSlow step initial = myFoldl (\xs x -> xs ++ [step (last xs) x]) [initial]
+scanlFoldSlow step initial = foldl (\xs x -> xs ++ [step (last xs) x]) [initial]
 
 factList :: (Num a, Enum a) => a -> [a]
 factList n = scanl1 (*) [1 .. n]
@@ -125,11 +126,11 @@ returnDivisibleFilter d = filter (\n -> n `mod` d == 0)
 choosingTails :: (Num a, Ord a) => [[a]] -> [[a]]
 choosingTails ls = [t | (h : t) <- ls, h > 5]
 
-myComprehendingFilter :: (a -> Bool) -> [a] -> [a]
-myComprehendingFilter pred xs = [x | x <- xs, pred x]
+comprehendingFilter :: (a -> Bool) -> [a] -> [a]
+comprehendingFilter pred xs = [x | x <- xs, pred x]
 
-myComprehendingMap :: (a -> b) -> [a] -> [b]
-myComprehendingMap f xs = [f x | x <- xs]
+comprehendingMap :: (a -> b) -> [a] -> [b]
+comprehendingMap f xs = [f x | x <- xs]
 
 doubleOfFirstForEvenSecondsFilterMap :: (Integral a, Num b) => [(b, a)] -> [b]
 doubleOfFirstForEvenSecondsFilterMap = map ((2 *) . fst) . filter (even . snd)

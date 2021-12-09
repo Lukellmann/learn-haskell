@@ -1,4 +1,5 @@
 import Numeric.Natural (Natural)
+import Prelude hiding (length, replicate, zip, (!!), (++))
 
 -- Numeric recursion
 
@@ -35,31 +36,31 @@ log2 n = 1 + log2 (div n 2)
 
 -- List-based recursion
 
-myLength :: [a] -> Natural
-myLength [] = 0
-myLength (_ : xs) = 1 + myLength xs
+length :: [a] -> Natural
+length [] = 0
+length (_ : xs) = 1 + length xs
 
-(+++) :: [a] -> [a] -> [a]
-[] +++ ys = ys
-(x : xs) +++ ys = x : (xs +++ ys)
+(++) :: [a] -> [a] -> [a]
+[] ++ ys = ys
+(x : xs) ++ ys = x : (xs ++ ys)
 
-myReplicate :: Integral a => a -> b -> [b]
-myReplicate n x
+replicate :: Integral a => a -> b -> [b]
+replicate n x
   | n < 1 = []
-  | otherwise = x : myReplicate (n - 1) x
+  | otherwise = x : replicate (n - 1) x
 
-(!!!) :: [a] -> Natural -> a
-[] !!! _ = error "index too large"
-[x] !!! 0 = x
-(_ : xs) !!! n = xs !!! (n - 1)
+(!!) :: [a] -> Natural -> a
+[] !! _ = error "index too large"
+[x] !! 0 = x
+(_ : xs) !! n = xs !! (n - 1)
 
-myZip :: [a] -> [b] -> [(a, b)]
-myZip [] _ = []
-myZip _ [] = []
-myZip (x : xs) (y : ys) = (x, y) : myZip xs ys
+zip :: [a] -> [b] -> [(a, b)]
+zip [] _ = []
+zip _ [] = []
+zip (x : xs) (y : ys) = (x, y) : zip xs ys
 
-myOtherLength :: [a] -> Natural
-myOtherLength xs = loop xs 0
+otherLength :: [a] -> Natural
+otherLength xs = loop xs 0
   where
     loop [] acc = acc
     loop (_ : xs) acc = loop xs (acc + 1)

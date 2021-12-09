@@ -1,3 +1,5 @@
+import Prelude hiding (Maybe (..))
+
 -- Analysing pattern matching
 
 mappm _ [] = []
@@ -66,10 +68,10 @@ z' = x + 5 where (x : _) = map (* 2) [1, 2, 3]
 
 swap = \(x, y) -> (y, x)
 
-data MyMaybe a = MyNothing | MyJust a
+data Maybe a = Nothing | Just a
 
-catMyMaybes :: [MyMaybe a] -> [a]
-catMyMaybes ms = [x | MyJust x <- ms]
+catMaybes :: [Maybe a] -> [a]
+catMaybes ms = [x | Just x <- ms]
 
 putFirstChar :: IO ()
 putFirstChar = do

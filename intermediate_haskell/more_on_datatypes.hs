@@ -1,5 +1,8 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
+import Prelude hiding (Bool (..), Either (..), Maybe (..))
+import qualified Prelude as P (Bool (..))
+
 -- Enumerations
 
 data Month
@@ -27,7 +30,7 @@ data Colour
   | White
   | RGB Int Int Int -- constructor has arguments -> no enumeration
 
-data MyBool = MyFalse | MyTrue
+data Bool = False | True
   deriving (Bounded, Enum, Eq, Ord, Read, Show)
 
 -- Named Fields (Record Syntax)
@@ -64,7 +67,7 @@ data RecordConfiguration = RecordConfiguration
   }
   deriving (Eq, Show)
 
-directoryExists _ = True -- dummy
+directoryExists _ = P.True -- dummy
 
 changeDirAndIncreaseTime :: RecordConfiguration -> String -> Integer -> RecordConfiguration
 changeDirAndIncreaseTime cfg newDir time =
@@ -102,23 +105,23 @@ cfgUndef = Configuration {} -- evaluating any field will fail
 
 -- Parameterized Types
 
-data MyMaybe a = MyNothing | MyJust a
+data Maybe a = Nothing | Just a
 
-lookupName :: [(String, String)] -> String -> MyMaybe (String, String)
+lookupName :: [(String, String)] -> String -> Maybe (String, String)
 lookupName _ _ = undefined
 
 type Stack a = [a]
 
-data MyEither a b = MyLeft a | MyRight b
+data Either a b = Left a | Right b
 
-pairOff :: Integral a => a -> MyEither String a
+pairOff :: Integral a => a -> Either String a
 pairOff people
-  | people < 0 = MyLeft "Can't pair off negative number of people."
-  | people > 30 = MyLeft "Too many people for this activity."
-  | even people = MyRight (people `div` 2)
-  | otherwise = MyLeft "Can't pair off an odd number of people."
+  | people < 0 = Left "Can't pair off negative number of people."
+  | people > 30 = Left "Too many people for this activity."
+  | even people = Right (people `div` 2)
+  | otherwise = Left "Can't pair off an odd number of people."
 
 groupPeople :: (Integral a, Show a) => a -> String
 groupPeople people = case pairOff people of
-  MyRight groups -> "We have " ++ show groups ++ " group(s)."
-  MyLeft problem -> "Problem! " ++ problem
+  Right groups -> "We have " ++ show groups ++ " group(s)."
+  Left problem -> "Problem! " ++ problem

@@ -1,4 +1,5 @@
 import Data.List (group)
+import Prelude hiding (drop, init, last, map, sum, take)
 
 -- Rebuilding lists
 
@@ -14,19 +15,19 @@ multiplyList :: Num a => a -> [a] -> [a]
 multiplyList _ [] = []
 multiplyList x (y : ys) = (x * y) : multiplyList x ys
 
-myTake :: Integral a => a -> [b] -> [b]
-myTake _ [] = []
-myTake n _ | n < 1 = []
-myTake n (x : xs) = x : myTake (n - 1) xs
+take :: Integral a => a -> [b] -> [b]
+take _ [] = []
+take n _ | n < 1 = []
+take n (x : xs) = x : take (n - 1) xs
 
-myDrop :: Integral a => a -> [b] -> [b]
-myDrop _ [] = []
-myDrop n list | n < 1 = list
-myDrop n (x : xs) = myDrop (n - 1) xs
+drop :: Integral a => a -> [b] -> [b]
+drop _ [] = []
+drop n list | n < 1 = list
+drop n (x : xs) = drop (n - 1) xs
 
-mySum :: Num a => [a] -> a
-mySum [] = 0
-mySum (x : xs) = x + mySum xs
+sum :: Num a => [a] -> a
+sum [] = 0
+sum (x : xs) = x + sum xs
 
 scanSum :: Num a => [a] -> [a]
 scanSum [] = []
@@ -52,35 +53,35 @@ alternativeMultiplyList x = applyToNums ((*) x)
 
 -- The map function
 
-myMap :: (a -> b) -> [a] -> [b]
-myMap _ [] = []
-myMap f (x : xs) = f x : myMap f xs
+map :: (a -> b) -> [a] -> [b]
+map _ [] = []
+map f (x : xs) = f x : map f xs
 
 anotherAlternativeMultiplyList :: Num a => a -> [a] -> [a]
-anotherAlternativeMultiplyList x = myMap ((*) x)
+anotherAlternativeMultiplyList x = map ((*) x)
 
 heads :: [[a]] -> [a]
-heads = myMap head
+heads = map head
 
 negateList :: Num a => [a] -> [a]
-negateList = myMap negate
+negateList = map negate
 
 divisors :: Integral a => a -> [a]
 divisors p = [f | f <- [1 .. p], p `mod` f == 0]
 
 divisorsList :: Integral a => [a] -> [[a]]
-divisorsList = myMap divisors
+divisorsList = map divisors
 
 negateDivisorsList :: Integral a => [a] -> [[a]]
-negateDivisorsList = myMap (negateList . divisors)
+negateDivisorsList = map (negateList . divisors)
 
 encode :: String -> [(Int, Char)]
-encode decoded = myMap stringToLengthAndChar (group decoded)
+encode decoded = map stringToLengthAndChar (group decoded)
   where
     stringToLengthAndChar string = (length string, head string)
 
 decode :: [(Int, Char)] -> String
-decode encoded = concat (myMap lenghtAndCharToString encoded)
+decode encoded = concat (map lenghtAndCharToString encoded)
   where
     -- lenghtAndCharToString (length, char) = replicate length char
     lenghtAndCharToString = uncurry replicate
@@ -93,14 +94,14 @@ integralsFrom n = [n ..]
 evens :: Integral a => [a]
 evens = doubleList [1 ..]
 
-haskellIsLazy = scanSum (myTake 10 [1 ..]) == myTake 10 (scanSum [1 ..])
+haskellIsLazy = scanSum (take 10 [1 ..]) == take 10 (scanSum [1 ..])
 
-myLast :: [a] -> a
-myLast [] = error "empty list"
-myLast [x] = x
-myLast (_ : xs) = myLast xs
+last :: [a] -> a
+last [] = error "empty list"
+last [x] = x
+last (_ : xs) = last xs
 
-myInit :: [a] -> [a]
-myInit [] = error "empty list"
-myInit [_] = []
-myInit (x : xs) = x : myInit xs
+init :: [a] -> [a]
+init [] = error "empty list"
+init [_] = []
+init (x : xs) = x : init xs
