@@ -1,5 +1,5 @@
-import Prelude hiding (Eq, Ord, Real, compare, max, min, (/=), (<), (<=), (==), (>), (>=))
-import qualified Prelude as P (Eq, Ord, (==))
+import Prelude hiding (Eq (..), Ord (..), Real (..))
+import qualified Prelude as P (Eq ((==)), Ord)
 
 -- Classes and instances
 

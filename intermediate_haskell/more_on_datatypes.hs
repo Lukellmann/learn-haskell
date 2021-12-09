@@ -1,7 +1,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
 import Prelude hiding (Bool (..), Either (..), Maybe (..))
-import qualified Prelude as P (Bool (..))
+import qualified Prelude as P (Bool (True))
 
 -- Enumerations
 

@@ -30,4 +30,4 @@ roots :: Floating b => b -> b -> b -> (b, b)
 roots a b c =
   let sdisc = sqrt (b * b - 4 * a * c)
       twiceA = 2 * a
-   in ((- b + sdisc) / twiceA, (- b - sdisc) / twiceA)
+   in ((-b + sdisc) / twiceA, (-b - sdisc) / twiceA)
