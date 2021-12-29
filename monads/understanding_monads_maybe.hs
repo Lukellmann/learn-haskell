@@ -1,4 +1,4 @@
-import Control.Monad ((<=<))
+import Control.Monad ((<=<), (>=>))
 import Data.Maybe (fromMaybe)
 
 -- Safe functions
@@ -34,7 +34,7 @@ taxDatabase = undefined
 getRegistrationNumber :: String -> Maybe String
 getRegistrationNumber name = lookup name phonebook >>= (`lookup` governmentDatabase)
 
-getTaxOwed, getTaxOwed' :: String -> Maybe Double
+getTaxOwed, getTaxOwed', getTaxOwed'', getTaxOwed''' :: String -> Maybe Double
 getTaxOwed name =
   lookup name phonebook
     >>= (`lookup` governmentDatabase)
@@ -43,6 +43,8 @@ getTaxOwed' name = do
   number <- lookup name phonebook
   registration <- lookup number governmentDatabase
   lookup registration taxDatabase
+getTaxOwed'' = (`lookup` taxDatabase) <=< (`lookup` governmentDatabase) <=< (`lookup` phonebook)
+getTaxOwed''' = (`lookup` phonebook) >=> (`lookup` governmentDatabase) >=> (`lookup` taxDatabase)
 
 -- Extracting values
 
